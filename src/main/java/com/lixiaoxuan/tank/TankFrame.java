@@ -19,13 +19,15 @@ import java.util.Random;
 public class TankFrame extends Frame {
 
     private static volatile TankFrame tankFrame;
-    private final int GAME_WIDTH = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameWidth")));
-    private final int GAME_HEIGHT = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameHeight")));
+    static final int GAME_WIDTH = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameWidth")));
+    static final int GAME_HEIGHT = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameHeight")));
     Random r = new Random();
-    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), DirectionEnum.DOWN, this);
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), DirectionEnum.DOWN);
     Image offScreenImage = null;
 
     List<Bullet> bulletList = new ArrayList<>();
+    List<Explode> explodeList = new ArrayList<>();
+    List<Tank> tankList = new ArrayList<>();
 
     public static TankFrame getInstance() {
         if (tankFrame == null) {
@@ -72,9 +74,20 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("bullets:" + bulletList.size(), 10, 60);
+//        g.drawString("tanks:" + tanks.size(), 10, 80);
+        g.drawString("explodes" + explodeList.size(), 10, 100);
+        g.setColor(c);
+
         myTank.paint(g);
         for (int i = 0; i < bulletList.size(); i++) {
             bulletList.get(i).paint(g);
+        }
+
+        for (int j = 0; j < explodeList.size(); j++) {
+            explodeList.get(j).paint(g);
         }
     }
 }

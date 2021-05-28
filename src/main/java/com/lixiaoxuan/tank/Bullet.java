@@ -21,6 +21,10 @@ public class Bullet {
 
     private DirectionEnum dir;
 
+    Rectangle rect = new Rectangle();
+
+    private boolean living = true;
+
     private final static int SPEED = Integer.parseInt((String) PropertyMgr.get("bulletSpeed"));
 
     public Bullet(int x, int y, DirectionEnum dir) {
@@ -30,6 +34,11 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
+
+        if(!living){
+            TankFrame.getInstance().bulletList.remove(this);
+            return;
+        }
         //窗口绘画
         switch (dir) {
             case UP:
@@ -66,6 +75,13 @@ public class Bullet {
                 break;
             default:
                 break;
+        }
+
+        //边界检测
+        rect.x = this.x;
+        rect.y = this.y;
+        if (x < 0 || x > TankFrame.GAME_WIDTH || y < 0 || y > TankFrame.GAME_HEIGHT) {
+            living = false;
         }
     }
 }

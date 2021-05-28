@@ -23,8 +23,6 @@ public class Tank {
 
     private DirectionEnum dir;
 
-    private TankFrame tankFrame = null;
-
     private final static int SPEED = Integer.parseInt((String) PropertyMgr.get("tankSpeed"));
 
     public void paint(Graphics g) {
@@ -66,19 +64,36 @@ public class Tank {
             default:
                 break;
         }
+
+        boundsCheck();
     }
 
-    public Tank(int x, int y, DirectionEnum dir, TankFrame tankFrame) {
+    public Tank(int x, int y, DirectionEnum dir) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tankFrame = tankFrame;
     }
 
     public void fire() {
         int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
         int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
         Bullet bullet = new Bullet(bX,bY,dir);
-        tankFrame.bulletList.add(bullet);
+        TankFrame.getInstance().bulletList.add(bullet);
+    }
+
+    //边界检测
+    private void boundsCheck() {
+        if (this.x < 2) {
+            x = 2;
+        }
+        if (this.y < 28) {
+            y = 28;
+        }
+        if (this.x > TankFrame.GAME_WIDTH- Tank.WIDTH -2) {
+            x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
+        }
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT -2 ) {
+            y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
+        }
     }
 }
