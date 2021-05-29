@@ -2,6 +2,7 @@ package com.lixiaoxuan.tank;
 
 import com.lixiaoxuan.config.PropertyMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
+import com.lixiaoxuan.enums.Group;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * @author lixiaoxuan
@@ -22,7 +24,7 @@ public class TankFrame extends Frame {
     static final int GAME_WIDTH = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameWidth")));
     static final int GAME_HEIGHT = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameHeight")));
     Random r = new Random();
-    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), DirectionEnum.DOWN);
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), DirectionEnum.DOWN, Group.GOOD);
     Image offScreenImage = null;
 
     List<Bullet> bulletList = new ArrayList<>();
@@ -45,6 +47,7 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle((String) PropertyMgr.get("gameTitle"));
         this.addKeyListener(new MyKeyListener(myTank));
+        tankList.add(myTank);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -77,7 +80,7 @@ public class TankFrame extends Frame {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("bullets:" + bulletList.size(), 10, 60);
-//        g.drawString("tanks:" + tanks.size(), 10, 80);
+        g.drawString("tanks:" + tankList.size(), 10, 80);
         g.drawString("explodes" + explodeList.size(), 10, 100);
         g.setColor(c);
 
@@ -89,5 +92,18 @@ public class TankFrame extends Frame {
         for (int j = 0; j < explodeList.size(); j++) {
             explodeList.get(j).paint(g);
         }
+
+        for (int i = 0; i < bulletList.size(); i++) {
+            for (Tank t : tankList)
+                bulletList.get(i).collideWith(t);
+        }
+
+        for (int i = 0; i < tankList.size(); i++) {
+            tankList.get(i).paint(g);
+        }
+    }
+
+    public void addTank(Tank tank) {
+        tankList.add(tank);
     }
 }

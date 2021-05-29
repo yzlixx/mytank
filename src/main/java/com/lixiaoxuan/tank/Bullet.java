@@ -5,6 +5,7 @@ import com.lixiaoxuan.config.ResourceMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
 
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * @author lixiaoxuan
@@ -23,19 +24,26 @@ public class Bullet {
 
     Rectangle rect = new Rectangle();
 
+    private UUID playerId;
+
     private boolean living = true;
 
     private final static int SPEED = Integer.parseInt((String) PropertyMgr.get("bulletSpeed"));
 
-    public Bullet(int x, int y, DirectionEnum dir) {
+    public Bullet(int x, int y, DirectionEnum dir, UUID playerId) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.playerId = playerId;
+        rect.x = x;
+        rect.y = y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public void paint(Graphics g) {
 
-        if(!living){
+        if (!living) {
             TankFrame.getInstance().bulletList.remove(this);
             return;
         }
@@ -83,5 +91,19 @@ public class Bullet {
         if (x < 0 || x > TankFrame.GAME_WIDTH || y < 0 || y > TankFrame.GAME_HEIGHT) {
             living = false;
         }
+    }
+
+    public void collideWith(Tank tank) {
+        if (this.playerId.equals(tank.getId())) {
+            return;
+        }
+        if (this.living && tank.isLiving() && this.rect.intersects(tank.rect)) {
+            tank.die();
+            this.die();
+        }
+    }
+
+    private void die() {
+        this.living = false;
     }
 }
