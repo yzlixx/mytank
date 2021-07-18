@@ -8,4 +8,12 @@ public abstract class GameObject implements Serializable {
     protected int x,y;
 
     public abstract void paint(Graphics graphics);
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

@@ -5,6 +5,7 @@ import com.lixiaoxuan.GameObject;
 import com.lixiaoxuan.config.PropertyMgr;
 import com.lixiaoxuan.config.ResourceMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
+import com.lixiaoxuan.enums.Group;
 
 import java.awt.*;
 import java.util.UUID;
@@ -23,19 +24,22 @@ public class Bullet extends GameObject {
 
     private DirectionEnum dir;
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
 
     private UUID playerId;
 
     private boolean living = true;
 
+    public Group group = Group.BAD;
+
     private final static int SPEED = Integer.parseInt((String) PropertyMgr.get("bulletSpeed"));
 
-    public Bullet(int x, int y, DirectionEnum dir, UUID playerId) {
+    public Bullet(int x, int y, DirectionEnum dir, UUID playerId, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.playerId = playerId;
+        this.group = group;
         rect.x = x;
         rect.y = y;
         rect.width = WIDTH;
@@ -103,7 +107,7 @@ public class Bullet extends GameObject {
         }
     }
 
-    private void die() {
+    public void die() {
         this.living = false;
     }
 }

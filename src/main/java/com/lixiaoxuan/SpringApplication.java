@@ -11,7 +11,7 @@ import com.lixiaoxuan.model.TankFrame;
 public class SpringApplication {
 
     public static void main(String[] args) throws InterruptedException {
-        TankFrame tf = new TankFrame();
+        TankFrame tf = TankFrame.getInstance();
 
         new Thread(() -> new Audio("audio/war1.wav").loop()).start();
 

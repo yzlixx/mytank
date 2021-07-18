@@ -36,9 +36,11 @@ public class Tank extends GameObject {
 
     private boolean moving = true;
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
 
     private UUID id = UUID.randomUUID();
+
+    int oldX, oldY;
 
     public void paint(Graphics g) {
 
@@ -118,9 +120,9 @@ public class Tank extends GameObject {
     }
 
     public void fire() {
-        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        Bullet bullet = new Bullet(bX, bY, this.dir, this.id);
+//        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
+//        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
+//        Bullet bullet = new Bullet(bX, bY, this.dir, this.id);
     }
 
     //边界检测
@@ -145,5 +147,10 @@ public class Tank extends GameObject {
 
     public void die() {
         this.living = false;
+    }
+
+    public void back(){
+        x = oldX;
+        y = oldY;
     }
 }

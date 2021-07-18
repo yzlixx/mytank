@@ -17,25 +17,26 @@ public class TankFrame extends Frame {
 
     GameModel gm = GameModel.getInstance();
 
-//    private static TankFrame INSTANCE = new TankFrame();
+    private static volatile TankFrame INSTANCE;
     static final int GAME_WIDTH = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameWidth")));
     static final int GAME_HEIGHT = Integer.valueOf((String) Objects.requireNonNull(PropertyMgr.get("gameHeight")));
     Image offScreenImage = null;
 
-//    public static TankFrame getInstance() {
-////        if (INSTANCE == null) {
-////            synchronized (TankFrame.class) {
-////                if (INSTANCE == null) {
-////                    INSTANCE = new TankFrame();
-////                }
-////            }
-////        }
-//        return INSTANCE;
-//    }
+    public static TankFrame getInstance() {
+        if (INSTANCE == null) {
+            synchronized (TankFrame.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new TankFrame();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
+        setVisible(true);
         setTitle((String) PropertyMgr.get("gameTitle"));
         this.addKeyListener(new MyKeyListener());
         addWindowListener(new WindowAdapter() {

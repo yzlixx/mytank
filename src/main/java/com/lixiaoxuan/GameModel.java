@@ -26,6 +26,8 @@ public class GameModel {
 
     private List<GameObject> objects = new ArrayList<>();
 
+
+
     private void init() {
         //添加主战坦克
         myTank = new Tank(200, 400, DirectionEnum.DOWN, Group.GOOD);
