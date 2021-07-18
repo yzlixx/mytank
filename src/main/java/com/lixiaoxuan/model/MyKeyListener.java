@@ -1,5 +1,6 @@
-package com.lixiaoxuan.tank;
+package com.lixiaoxuan.model;
 
+import com.lixiaoxuan.GameModel;
 import com.lixiaoxuan.enums.DirectionEnum;
 
 import java.awt.event.KeyEvent;
@@ -12,15 +13,13 @@ import java.awt.event.KeyListener;
  */
 public class MyKeyListener implements KeyListener {
 
-    private Tank tank;
+    GameModel gm = GameModel.getInstance();
+
     private boolean dirL = false;
     private boolean dirR = false;
     private boolean dirU = false;
     private boolean dirD = false;
 
-    public MyKeyListener(Tank tank) {
-        this.tank = tank;
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -66,8 +65,6 @@ public class MyKeyListener implements KeyListener {
                 dirD = false;
                 break;
             case KeyEvent.VK_SPACE:
-                // todo fire()
-                tank.fire();
                 break;
             default:
                 break;
@@ -76,17 +73,18 @@ public class MyKeyListener implements KeyListener {
     }
 
     private void setMainTankDir() {
+        Tank myTank = gm.getMainTank();
         if(dirL){
-            tank.setDir(DirectionEnum.LEFT);
+            myTank.setDir(DirectionEnum.LEFT);
         }
         if(dirR){
-            tank.setDir(DirectionEnum.RIGHT);
+            myTank.setDir(DirectionEnum.RIGHT);
         }
         if(dirU){
-            tank.setDir(DirectionEnum.UP);
+            myTank.setDir(DirectionEnum.UP);
         }
         if(dirD){
-            tank.setDir(DirectionEnum.DOWN);
+            myTank.setDir(DirectionEnum.DOWN);
         }
 
     }

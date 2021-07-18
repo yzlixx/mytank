@@ -1,5 +1,5 @@
 
-package com.lixiaoxuan.tank;
+package com.lixiaoxuan.model;
 
 import javax.sound.sampled.*;
 import java.io.IOException;

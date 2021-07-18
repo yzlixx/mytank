@@ -1,5 +1,7 @@
-package com.lixiaoxuan.tank;
+package com.lixiaoxuan.model;
 
+import com.lixiaoxuan.GameModel;
+import com.lixiaoxuan.GameObject;
 import com.lixiaoxuan.config.PropertyMgr;
 import com.lixiaoxuan.config.ResourceMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
@@ -16,13 +18,11 @@ import java.util.UUID;
  * @date 2021/5/27 16:37
  */
 @Data
-public class Tank {
+public class Tank extends GameObject {
 
     public static int WIDTH = ResourceMgr.goodTankU.getWidth();
 
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
-
-    private int x, y;
 
     private DirectionEnum dir;
 
@@ -44,9 +44,7 @@ public class Tank {
 
 
         if (!living) {
-            TankFrame.getInstance().tankList.remove(this);
-            moving = false;
-            return;
+            GameModel.getInstance().remove(this);
         }
         //窗口绘画
         switch (dir) {
@@ -123,7 +121,6 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
         Bullet bullet = new Bullet(bX, bY, this.dir, this.id);
-        TankFrame.getInstance().bulletList.add(bullet);
     }
 
     //边界检测
@@ -148,8 +145,5 @@ public class Tank {
 
     public void die() {
         this.living = false;
-        int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-        int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-        TankFrame.getInstance().explodeList.add(new Explode(eX, eY));
     }
 }

@@ -1,5 +1,7 @@
-package com.lixiaoxuan.tank;
+package com.lixiaoxuan.model;
 
+import com.lixiaoxuan.GameModel;
+import com.lixiaoxuan.GameObject;
 import com.lixiaoxuan.config.PropertyMgr;
 import com.lixiaoxuan.config.ResourceMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
@@ -12,13 +14,12 @@ import java.util.UUID;
  * @description: 子弹类
  * @date 2021/5/27 20:09
  */
-public class Bullet {
+public class Bullet extends GameObject {
 
     public static int WIDTH = ResourceMgr.bulletD.getWidth();
 
     public static int HEIGHT = ResourceMgr.bulletD.getHeight();
 
-    private int x, y;
 
     private DirectionEnum dir;
 
@@ -44,8 +45,7 @@ public class Bullet {
     public void paint(Graphics g) {
 
         if (!living) {
-            TankFrame.getInstance().bulletList.remove(this);
-            return;
+            GameModel.getInstance().remove(this);
         }
         //窗口绘画
         switch (dir) {
