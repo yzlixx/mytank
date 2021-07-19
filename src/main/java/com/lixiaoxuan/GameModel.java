@@ -65,7 +65,7 @@ public class GameModel {
 
         // 碰撞检测
         for (int i = 0; i < objects.size(); i++) {
-            for (int j = 0; j < objects.size(); j++) {
+            for (int j = i + 1; j < objects.size(); j++) {
                 GameObject o1 = objects.get(i);
                 GameObject o2 = objects.get(j);
                 chain.collide(o1, o2);
