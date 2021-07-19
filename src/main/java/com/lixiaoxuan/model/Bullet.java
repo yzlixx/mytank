@@ -44,6 +44,8 @@ public class Bullet extends GameObject {
         rect.y = y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
@@ -71,6 +73,16 @@ public class Bullet extends GameObject {
         move();
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     private void move() {
         switch (dir) {
             case UP:
@@ -94,16 +106,6 @@ public class Bullet extends GameObject {
         rect.y = this.y;
         if (x < 0 || x > TankFrame.GAME_WIDTH || y < 0 || y > TankFrame.GAME_HEIGHT) {
             living = false;
-        }
-    }
-
-    public void collideWith(Tank tank) {
-        if (this.playerId.equals(tank.getId())) {
-            return;
-        }
-        if (this.living && tank.isLiving() && this.rect.intersects(tank.rect)) {
-            tank.die();
-            this.die();
         }
     }
 

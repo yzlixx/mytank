@@ -6,9 +6,12 @@ import com.lixiaoxuan.config.PropertyMgr;
 import com.lixiaoxuan.config.ResourceMgr;
 import com.lixiaoxuan.enums.DirectionEnum;
 import com.lixiaoxuan.enums.Group;
+import com.lixiaoxuan.strategy.DefaultFireStrategy;
+import com.lixiaoxuan.strategy.FireStrategy;
 import lombok.Data;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.UUID;
 
@@ -24,11 +27,11 @@ public class Tank extends GameObject {
 
     public static int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    private DirectionEnum dir;
+    public DirectionEnum dir;
 
     private final static int SPEED = Integer.parseInt((String) PropertyMgr.get("tankSpeed"));
 
-    private Group group;
+    public Group group;
 
     private Random random = new Random();
 
@@ -38,9 +41,11 @@ public class Tank extends GameObject {
 
     public Rectangle rect = new Rectangle();
 
-    private UUID id = UUID.randomUUID();
+    public UUID id = UUID.randomUUID();
 
     int oldX, oldY;
+
+    FireStrategy fs;
 
     public void paint(Graphics g) {
 
@@ -69,11 +74,24 @@ public class Tank extends GameObject {
         move();
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     private void move() {
 
-        if(!living) return;
+        oldX = x;
+        oldY = y;
 
-        if(!moving) return ;
+        if (!living) return;
+
+        if (!moving) return;
 
         switch (dir) {
             case UP:
@@ -92,7 +110,7 @@ public class Tank extends GameObject {
                 break;
         }
 
-        if (this.group == Group.BAD && random.nextInt(1000) > 995){
+        if (this.group == Group.BAD && random.nextInt(1000) > 995) {
             this.fire();
         }
 
@@ -117,12 +135,28 @@ public class Tank extends GameObject {
         rect.y = y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        if (group == Group.BAD) {
+            String badFs = (String) PropertyMgr.get("badFS");
+            try {
+                fs = (FireStrategy) Class.forName(badFs).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            String goodFs = (String) PropertyMgr.get("goodFS");
+            try {
+                fs = (FireStrategy) Class.forName(goodFs).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        GameModel.getInstance().add(this);
     }
 
     public void fire() {
-//        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-//        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-//        Bullet bullet = new Bullet(bX, bY, this.dir, this.id);
+        fs.fire(this);
     }
 
     //边界检测
@@ -149,7 +183,7 @@ public class Tank extends GameObject {
         this.living = false;
     }
 
-    public void back(){
+    public void back() {
         x = oldX;
         y = oldY;
     }

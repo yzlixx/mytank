@@ -50,6 +50,7 @@ public class MyKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        Tank myTank = gm.getMainTank();
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_A:
@@ -65,6 +66,7 @@ public class MyKeyListener implements KeyListener {
                 dirD = false;
                 break;
             case KeyEvent.VK_SPACE:
+                myTank.fire();
                 break;
             default:
                 break;
